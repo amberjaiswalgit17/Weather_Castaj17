@@ -5,7 +5,15 @@ function capitalizeFirstLetter(string) {
 
 // Function to fetch weather data for a specific city
 async function getWeather(city) {
-    const apiKey = '47ad9000124dd441fbfa9e1593723163';  // Your API Key
+    // Retrieve API key from a secure location, like an environment variable
+    const apiKey = process.env.OPENWEATHER_API_KEY; // Ensure this is set up securely
+
+    // Check if the API key exists to avoid undefined errors
+    if (!apiKey) {
+        console.error("API key is missing.");
+        return;
+    }
+
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     document.getElementById('city-name').textContent = capitalizeFirstLetter(city);
@@ -17,7 +25,7 @@ async function getWeather(city) {
             throw new Error(`City not found: ${city}`);
         }
         const data = await response.json();
-        
+
         document.getElementById('Temp').textContent = `${data.main.temp}°C`;
         document.getElementById('Temp_max').textContent = `${data.main.temp_max}°C`;
         document.getElementById('Temp_min').textContent = `${data.main.temp_min}°C`;
